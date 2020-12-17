@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoList.Application\ToDoList.Application.csproj" />
+    <ProjectReference Include="..\ToDoList.Infrastructure.DataAccess\ToDoList.Infrastructure.Persistence.csproj" />
+  </ItemGroup>
+
+
+</Project>
