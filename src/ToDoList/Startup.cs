@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ToDoList.Application.Services.Abstractions;
+using ToDoList.Application.Services;
 using ToDoList.Infrastructure.Persistence.Services;
+using ToDoList.Infrastructure.Persistence.Services.Implementations;
+using ToDoList.Services.Implementations;
 
 namespace ToDoList
 {
@@ -14,12 +17,14 @@ namespace ToDoList
     {
         private readonly IConfiguration _config;
 
-        public Startup(IConfiguration configuration)
+        public Startup(
+            IConfiguration configuration)
         {
             _config = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(
+            IServiceCollection services)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => !a.IsDynamic)
@@ -27,17 +32,14 @@ namespace ToDoList
 
             services
                 .AddMediatR(assemblies)
-                .AddTransient<IDataAccess, DataAccess>(x =>
-                {
-                    var connStr = _config.GetConnectionString("Database");
-                    return new DataAccess(connStr);
-                })
+                
+                .AddTransient<IDataAccess, DataAccess>()
+                .AddTransient<IConnectionStringProvider, ConnectionStringProvider>()
                 .AddControllers();
         }
 
         public void Configure(
-            IApplicationBuilder app, 
-            IWebHostEnvironment env)
+            IApplicationBuilder app)
         {
             app.UseRouting();
 

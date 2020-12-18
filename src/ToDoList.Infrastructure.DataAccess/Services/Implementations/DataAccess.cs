@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Npgsql;
-using ToDoList.Application.Services.Abstractions;
+using ToDoList.Application.Services;
 using ToDoList.Core;
 
-namespace ToDoList.Infrastructure.Persistence.Services
+namespace ToDoList.Infrastructure.Persistence.Services.Implementations
 {
     public class DataAccess : IDataAccess
     {
         private readonly string _connectionString;
 
-        public DataAccess(string connectionString)
+        public DataAccess(
+            IConnectionStringProvider connectionStringProvider)
         {
-            _connectionString = connectionString;
+            _connectionString = connectionStringProvider.GetConnectionString();
         }
 
         public Task<User> GetUser(string login, string password)
@@ -31,25 +32,41 @@ namespace ToDoList.Infrastructure.Persistence.Services
                     ""Email"")
                 values ( @login, @password, @birthDate, @name, @email )";
 
-            await using var conn = new NpgsqlConnection(_connectionString);
-            await conn.OpenAsync();
-
-            await using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("login", user.Login);
-            cmd.Parameters.AddWithValue("password", user.Password);
-            cmd.Parameters.AddWithValue("birthDate", user.BirthDate);
-            cmd.Parameters.AddWithValue("name", user.Name);
-            cmd.Parameters.AddWithValue("email", user.Email);
-
-            await cmd.ExecuteNonQueryAsync();
+            await Exec(sql, command =>
+            {
+                command.Parameters.AddWithValue("login", user.Login);
+                command.Parameters.AddWithValue("password", user.Password);
+                command.Parameters.AddWithValue("birthDate", user.BirthDate);
+                command.Parameters.AddWithValue("name", user.Name);
+                command.Parameters.AddWithValue("email", user.Email);
+            });
         }
 
-        public Task UpdateUser(User user)
+        public async Task UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            var sql = @"
+                update ""Users"" 
+                set 
+                    ""Login"" = @login, 
+                    ""Password"" = @password, 
+                    ""BirthDate"" = @birthDate, 
+                    ""Name"" = @name, 
+                    ""Email"" = @email
+                where 
+                    ""Id"" = @id";
+
+            await Exec(sql, command =>
+            {
+                command.Parameters.AddWithValue("login", user.Login);
+                command.Parameters.AddWithValue("password", user.Password);
+                command.Parameters.AddWithValue("birthDate", user.BirthDate);
+                command.Parameters.AddWithValue("name", user.Name);
+                command.Parameters.AddWithValue("email", user.Email);
+                command.Parameters.AddWithValue("id", user.Id);
+            });
         }
 
-        public Task RemoveUser(User user)
+        public Task RemoveUser(Guid userId)
         {
             throw new NotImplementedException();
         }

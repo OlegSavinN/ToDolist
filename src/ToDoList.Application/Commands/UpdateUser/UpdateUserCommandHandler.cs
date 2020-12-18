@@ -3,23 +3,23 @@ using System.Threading.Tasks;
 using MediatR;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.AddUser
+namespace ToDoList.Application.Commands.UpdateUser
 {
-    public class AddUserCommandHandler : IRequestHandler<AddUserCommand>
+    class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     {
         private readonly IDataAccess _dataAccess;
 
-        public AddUserCommandHandler(
+        public UpdateUserCommandHandler(
             IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
         }
 
         public async Task<Unit> Handle(
-            AddUserCommand command, 
+            UpdateUserCommand command, 
             CancellationToken cancellationToken)
         {
-            await _dataAccess.AddUser(command.User);
+            await _dataAccess.UpdateUser(command.User);
             return Unit.Value;
         }
     }

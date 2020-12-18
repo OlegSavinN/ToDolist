@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Services.Abstractions
+namespace ToDoList.Application.Services
 {
     public interface IDataAccess
     {
         Task<User> GetUser(string login, string password);
         Task AddUser(User user);
         Task UpdateUser(User user);
-        Task RemoveUser(User user);
+        Task RemoveUser(Guid userId);
 
         Task<ToDoItemsList[]> GetTodoLists(Guid userId);
         Task AddToDoList(ToDoItemsList list);
