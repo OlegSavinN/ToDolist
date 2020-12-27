@@ -1,25 +1,25 @@
-﻿using System.Threading;
+﻿using MediatR;
+using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.AddUser
+namespace ToDoList.Application.Commands.RemoveUser
 {
-    public class AddUserCommandHandler : IRequestHandler<AddUserCommand>
+    class RemoveUserCommandHandler : IRequestHandler<RemoveUserCommand>
     {
         private readonly IDataAccess _dataAccess;
 
-        public AddUserCommandHandler(
+        public RemoveUserCommandHandler(
             IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
         }
 
         public async Task<Unit> Handle(
-            AddUserCommand command, 
+            RemoveUserCommand command,
             CancellationToken cancellationToken)
         {
-            await _dataAccess.AddUser(command.User);
+            await _dataAccess.RemoveUser(command.UserId);
             return Unit.Value;
         }
     }

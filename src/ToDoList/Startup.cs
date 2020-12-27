@@ -35,7 +35,8 @@ namespace ToDoList
                 
                 .AddTransient<IDataAccess, DataAccess>()
                 .AddTransient<IConnectionStringProvider, ConnectionStringProvider>()
-                .AddControllers();
+                .AddControllers()
+                .AddNewtonsoftJson();
         }
 
         public void Configure(

@@ -14,10 +14,11 @@ namespace ToDoList.Application.Services
         Task<ToDoItemsList[]> GetTodoLists(Guid userId);
         Task AddToDoList(ToDoItemsList list);
         Task UpdateToDoList(ToDoItemsList list);
-        Task RemoveToDoList(ToDoItemsList list);
+        Task RemoveToDoList(Guid listId);
 
+        //Task<ToDoItem> GetTodoItem(Guid userId);
         Task AddToDoItem(ToDoItem toDoItem);
         Task UpdateToDoItem(ToDoItem toDoItem);
-        Task RemoveToDoItem(ToDoItem toDoItem);
+        Task RemoveToDoItem(Guid toDoItemId);
     }
 }
