@@ -3,7 +3,7 @@ using ToDoList.Core;
 
 namespace ToDoList.Application.Commands.GetToken
 {
-    public class GetTokenCommand : IRequest
+    public class GetTokenCommand : IRequest<string>
     {
         public string UserLogin { get; }
         public string UserPassword { get; }

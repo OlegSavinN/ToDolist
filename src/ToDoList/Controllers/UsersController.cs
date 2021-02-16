@@ -14,10 +14,11 @@ using ToDoList.Application.Commands.RemoveToDoItem;
 using ToDoList.Application.Commands.GetUser;
 using ToDoList.Application.Commands.GetToDoList;
 using ToDoList.Application.Commands.GetToDoItem;
-using ToDoList.Application.Commands.GetToken;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("users")]
     public class UsersController : ControllerBase
@@ -31,6 +32,7 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
+        
         public async Task AddUser(
             [FromBody] User user)
         {
@@ -59,14 +61,6 @@ namespace ToDoList.Controllers
             [FromBody] User user)
         {
             var command = new GetUserCommand(user);
-            await _mediator.Send(command);
-        }
-
-        [HttpPost("Token")]
-        public async Task GetToken(
-            [FromBody] User user)
-        {
-            var command = new GetTokenCommand(user);
             await _mediator.Send(command);
         }
 

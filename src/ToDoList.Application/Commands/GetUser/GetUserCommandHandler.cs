@@ -2,24 +2,25 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Services;
+using ToDoList.Core;
 
 namespace ToDoList.Application.Commands.GetUser
 {
-    class GetUserCommandHandler : IRequestHandler<GetUserCommand>
+    class GetUserQueryHandler : IRequestHandler<GetUserCommand, User>
     {
         private readonly IDataAccess _dataAccess;
 
-        public GetUserCommandHandler(
+        public GetUserQueryHandler(
             IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
         }
-        public async Task<Unit> Handle(
-            GetUserCommand command,
+        public async Task<User> Handle(
+            GetUserCommand query,
             CancellationToken cancellationToken)
         {
-            await _dataAccess.GetUser(command.UserLogin, command.UserPassword);
-            return Unit.Value;
+            User user = await _dataAccess.GetUser(query.UserLogin, query.UserPassword);
+            return user;
         }
     }
 }
