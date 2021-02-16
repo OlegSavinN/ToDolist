@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using ToDoList.Application.Services;
 using ToDoList.Infrastructure.Persistence.Services;
 using ToDoList.Infrastructure.Persistence.Services.Implementations;
+using ToDoList.Options;
 using ToDoList.Services.Implementations;
 
 namespace ToDoList
@@ -32,9 +35,27 @@ namespace ToDoList
 
             services
                 .AddMediatR(assemblies)
-                
+
                 .AddTransient<IDataAccess, DataAccess>()
                 .AddTransient<IConnectionStringProvider, ConnectionStringProvider>()
+
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    //options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        //ValidateIssuer = true,
+                        //ValidIssuer = AuthOptions.Issuer,
+                        //ValidateAudience = true,
+                        //ValidAudience = AuthOptions.Audience,
+                        //ValidateLifetime = true,
+                        //IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        //ValidateIssuerSigningKey = true,
+                    };
+                });
+
+            services
                 .AddControllers()
                 .AddNewtonsoftJson();
         }
@@ -43,6 +64,9 @@ namespace ToDoList
             IApplicationBuilder app)
         {
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -42,8 +42,9 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
                     ""Password"", 
                     ""BirthDate"", 
                     ""Name"", 
-                    ""Email"")
-                values ( @login, @password, @birthDate, @name, @email )";
+                    ""Email"",
+                    ""Role"")
+                values ( @login, @password, @birthDate, @name, @email, @role )";
 
             await Exec(sql, command =>
             {
@@ -52,6 +53,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
                 command.Parameters.AddWithValue("birthDate", user.BirthDate);
                 command.Parameters.AddWithValue("name", user.Name);
                 command.Parameters.AddWithValue("email", user.Email);
+                command.Parameters.AddWithValue("role", Convert.ToString(user.Role));
             });
         }
 
@@ -65,6 +67,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
                     ""BirthDate"" = @birthDate, 
                     ""Name"" = @name, 
                     ""Email"" = @email
+                    ""Role"" = @role
                 where 
                     ""Id"" = @id";
 
@@ -76,6 +79,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
                 command.Parameters.AddWithValue("name", user.Name);
                 command.Parameters.AddWithValue("email", user.Email);
                 command.Parameters.AddWithValue("id", user.Id);
+                command.Parameters.AddWithValue("role", Convert.ToString(user.Role));
             });
         }
 
@@ -91,7 +95,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
             });
         }
 
-        public async Task<ToDoItemsList[]> GetTodoLists(Guid userId)
+         public async Task<ToDoItemsList[]> GetTodoLists(Guid userId)
         {
             var sql = @"
                 select* from ""ToDoItemLists""
@@ -150,6 +154,20 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
                 command.Parameters.AddWithValue("id", listId);
             });
         }
+        public async Task<ToDoItem[]> GetTodoItem(Guid listId)
+        {
+            var sql = @"
+                select* from ""ToDoItems""
+                where
+                    ""ListId"" = @listId";
+
+            ToDoItem[] toDoItem = await ExecTable<ToDoItem>(sql, DatabaseMapping.ToDoItem, command =>
+            {
+                command.Parameters.AddWithValue("listId", listId);
+            });
+
+            return toDoItem;
+         }
 
         public async Task AddToDoItem(ToDoItem toDoItem)
         {
@@ -272,5 +290,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
 
             return result.ToArray();
         }
+
+        
     }
 }

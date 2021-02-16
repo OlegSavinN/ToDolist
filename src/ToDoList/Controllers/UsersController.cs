@@ -13,6 +13,8 @@ using ToDoList.Application.Commands.UpdateToDoItem;
 using ToDoList.Application.Commands.RemoveToDoItem;
 using ToDoList.Application.Commands.GetUser;
 using ToDoList.Application.Commands.GetToDoList;
+using ToDoList.Application.Commands.GetToDoItem;
+using ToDoList.Application.Commands.GetToken;
 
 namespace ToDoList.Controllers
 {
@@ -60,6 +62,14 @@ namespace ToDoList.Controllers
             await _mediator.Send(command);
         }
 
+        [HttpPost("Token")]
+        public async Task GetToken(
+            [FromBody] User user)
+        {
+            var command = new GetTokenCommand(user);
+            await _mediator.Send(command);
+        }
+
         [HttpPost("ToDoItemlists")]
         public async Task AddToDoItemList(
             [FromBody] ToDoItemsList toDoItemList)
@@ -92,6 +102,7 @@ namespace ToDoList.Controllers
             await _mediator.Send(command);
         }
 
+
         [HttpPost("ToDoItem")]
         public async Task AddToDoItem(
             [FromBody] ToDoItem toDoItem)
@@ -113,6 +124,14 @@ namespace ToDoList.Controllers
             [FromBody] ToDoItem toDoItem)
         {
             var command = new RemoveToDoItemCommand(toDoItem);
+            await _mediator.Send(command);
+        }
+
+        [HttpGet("ToDoItem")]
+        public async Task GetToDoItem(
+            [FromBody] ToDoItemsList toDoItemsList)
+        {
+            var command = new GetToDoItemCommand(toDoItemsList);
             await _mediator.Send(command);
         }
     }

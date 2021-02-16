@@ -16,7 +16,7 @@ namespace ToDoList.Application.Services
         Task UpdateToDoList(ToDoItemsList list);
         Task RemoveToDoList(Guid listId);
 
-        //Task<ToDoItem> GetTodoItem(Guid userId);
+        Task<ToDoItem[]> GetTodoItem(Guid userId);
         Task AddToDoItem(ToDoItem toDoItem);
         Task UpdateToDoItem(ToDoItem toDoItem);
         Task RemoveToDoItem(Guid toDoItemId);

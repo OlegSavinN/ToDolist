@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System;
 using ToDoList.Core;
 
 namespace ToDoList.Infrastructure.Persistence.Services.Implementations
@@ -16,6 +17,7 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
             user.Name = reader.GetString(4);
             user.Email = reader.GetString(5);
             user.ToDoLists = null;
+            user.Role = (Role)Enum.Parse(typeof(Role), reader.GetString(6));
 
             return user;
         }
@@ -42,8 +44,8 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
             toDoItem.Date = reader.GetDateTime(2);
             toDoItem.Title = reader.GetString(3);
             toDoItem.Description = reader.GetString(4);
-            toDoItem.Priority = (Priority)reader.GetValue(5);
-            toDoItem.State = (State)reader.GetValue(6);
+            toDoItem.Priority = (Priority)Enum.Parse(typeof(Priority), reader.GetString(5));
+            toDoItem.State = (State)Enum.Parse(typeof(State), reader.GetString(6));
 
             return toDoItem;
         }
