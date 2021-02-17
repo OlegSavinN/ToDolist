@@ -12,14 +12,14 @@ using ToDoList.Application.Options;
 using ToDoList.Application.Services;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.GetToken
+namespace ToDoList.Application.Queries.GetToken
 {
-    class GetTokenCommandHandler : IRequestHandler<GetTokenCommand, string>
+    class GetTokenQueryHandler : IRequestHandler<GetTokenQuery, string>
     {
         private readonly IDataAccess _dataAccess;
         private readonly AuthOptions _authOptions;
 
-        public GetTokenCommandHandler(
+        public GetTokenQueryHandler(
             IDataAccess dataAccess,
             IOptions<AuthOptions> authOptions)
         {
@@ -27,7 +27,7 @@ namespace ToDoList.Application.Commands.GetToken
             _authOptions = authOptions.Value;
         }
         public async Task<string> Handle(
-            GetTokenCommand command,
+            GetTokenQuery command,
             CancellationToken cancellationToken)
         {
             User user = await GetUser(command);
@@ -37,7 +37,7 @@ namespace ToDoList.Application.Commands.GetToken
             return token;
         }
 
-        private async Task<User> GetUser(GetTokenCommand command)
+        private async Task<User> GetUser(GetTokenQuery command)
         {
             var user = await _dataAccess.GetUser(command.UserLogin, command.UserPassword);
 
@@ -69,7 +69,8 @@ namespace ToDoList.Application.Commands.GetToken
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, Convert.ToString(user.Role))
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(

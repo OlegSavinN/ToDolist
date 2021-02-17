@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.UpdateToDoItem
+namespace ToDoList.Application.Queries.UpdateToDoItem
 {
     class UpdateToDoItemCommandHandler : IRequestHandler<UpdateToDoItemCommand>
     {

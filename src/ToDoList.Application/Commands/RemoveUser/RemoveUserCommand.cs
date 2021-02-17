@@ -2,7 +2,7 @@
 using System;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.RemoveUser
+namespace ToDoList.Application.Queries.RemoveUser
 {
     public class RemoveUserCommand : IRequest
     {

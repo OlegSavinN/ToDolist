@@ -1,14 +1,14 @@
 ﻿using MediatR;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.GetUser
+namespace ToDoList.Application.Queries.GetToken
 {
-    public class GetUserCommand : IRequest<User>
+    public class GetTokenQuery : IRequest<string>
     {
         public string UserLogin { get; }
         public string UserPassword { get; }
 
-        public GetUserCommand(User user)
+        public GetTokenQuery(User user)
         {
             UserLogin = user.Login;
             UserPassword = user.Password;

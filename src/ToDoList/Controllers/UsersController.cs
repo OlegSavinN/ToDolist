@@ -1,19 +1,19 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ToDoList.Application.Commands.AddUser;
-using ToDoList.Application.Commands.UpdateUser;
-using ToDoList.Application.Commands.RemoveUser;
+using ToDoList.Application.Queries.AddUser;
+using ToDoList.Application.Queries.UpdateUser;
+using ToDoList.Application.Queries.RemoveUser;
 using ToDoList.Core;
-using ToDoList.Application.Commands.AddToDoList;
-using ToDoList.Application.Commands.AddToDoItem;
-using ToDoList.Application.Commands.UpdateToDoList;
-using ToDoList.Application.Commands.RemoveToDoList;
-using ToDoList.Application.Commands.UpdateToDoItem;
-using ToDoList.Application.Commands.RemoveToDoItem;
-using ToDoList.Application.Commands.GetUser;
-using ToDoList.Application.Commands.GetToDoList;
-using ToDoList.Application.Commands.GetToDoItem;
+using ToDoList.Application.Queries.AddToDoList;
+using ToDoList.Application.Queries.AddToDoItem;
+using ToDoList.Application.Queries.UpdateToDoList;
+using ToDoList.Application.Queries.RemoveToDoList;
+using ToDoList.Application.Queries.UpdateToDoItem;
+using ToDoList.Application.Queries.RemoveToDoItem;
+using ToDoList.Application.Queries.GetUser;
+using ToDoList.Application.Queries.GetToDoList;
+using ToDoList.Application.Queries.GetToDoItem;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
@@ -21,6 +21,7 @@ namespace ToDoList.Controllers
     [Authorize]
     [ApiController]
     [Route("users")]
+    [Authorize(Roles = "Admin, User, Vip")]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -32,6 +33,7 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         
         public async Task AddUser(
             [FromBody] User user)
@@ -60,7 +62,7 @@ namespace ToDoList.Controllers
         public async Task GetUser(
             [FromBody] User user)
         {
-            var command = new GetUserCommand(user);
+            var command = new GetUserQuery(user);
             await _mediator.Send(command);
         }
 
@@ -92,7 +94,7 @@ namespace ToDoList.Controllers
         public async Task GetToDoItemsList(
             [FromBody] User user)
         {
-            var command = new GetToDoItemListCommand(user);
+            var command = new GetToDoItemListQuery(user);
             await _mediator.Send(command);
         }
 
@@ -125,7 +127,7 @@ namespace ToDoList.Controllers
         public async Task GetToDoItem(
             [FromBody] ToDoItemsList toDoItemsList)
         {
-            var command = new GetToDoItemCommand(toDoItemsList);
+            var command = new GetToDoItemQuery(toDoItemsList);
             await _mediator.Send(command);
         }
     }

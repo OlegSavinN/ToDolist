@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.AddToDoList
+namespace ToDoList.Application.Queries.AddToDoList
 {
     public class AddToDoItemListCommand : IRequest
     {

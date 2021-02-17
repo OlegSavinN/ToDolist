@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using ToDoList.Application.Services;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.GetUser
+namespace ToDoList.Application.Queries.GetUser
 {
-    class GetUserQueryHandler : IRequestHandler<GetUserCommand, User>
+    class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>
     {
         private readonly IDataAccess _dataAccess;
 
@@ -16,7 +16,7 @@ namespace ToDoList.Application.Commands.GetUser
             _dataAccess = dataAccess;
         }
         public async Task<User> Handle(
-            GetUserCommand query,
+            GetUserQuery query,
             CancellationToken cancellationToken)
         {
             User user = await _dataAccess.GetUser(query.UserLogin, query.UserPassword);

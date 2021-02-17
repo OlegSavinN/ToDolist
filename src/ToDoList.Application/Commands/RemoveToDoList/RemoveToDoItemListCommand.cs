@@ -2,7 +2,7 @@
 using System;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.RemoveToDoList
+namespace ToDoList.Application.Queries.RemoveToDoList
 {
     public class RemoveToDoItemListCommand : IRequest
     {   

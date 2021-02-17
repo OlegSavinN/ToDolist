@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.RemoveToDoList
+namespace ToDoList.Application.Queries.RemoveToDoList
 {
     class RemoveToDoItemListCommandHandler : IRequestHandler<RemoveToDoItemListCommand>
     {

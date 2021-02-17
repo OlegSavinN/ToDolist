@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.UpdateUser
+namespace ToDoList.Application.Queries.UpdateUser
 {
     public class UpdateUserCommand : IRequest
     {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.AddToDoList
+namespace ToDoList.Application.Queries.AddToDoList
 {
     public class AddToDoItemListCommandHandler : IRequestHandler<AddToDoItemListCommand>
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using ToDoList.Application.Services;
 
-namespace ToDoList.Application.Commands.AddUser
+namespace ToDoList.Application.Queries.AddUser
 {
     public class AddUserCommandHandler : IRequestHandler<AddUserCommand>
     {

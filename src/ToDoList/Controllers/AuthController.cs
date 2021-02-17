@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ToDoList.Core;
-using ToDoList.Application.Commands.GetToken;
+using ToDoList.Application.Queries.GetToken;
 
 namespace ToDoList.Controllers
 {
@@ -21,7 +21,7 @@ namespace ToDoList.Controllers
         public async Task<string> GetToken(
             [FromBody] User user)
         {
-            var command = new GetTokenCommand(user);
+            var command = new GetTokenQuery(user);
             var token = await _mediator.Send(command);
 
             return token;

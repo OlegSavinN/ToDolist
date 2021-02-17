@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ToDoList.Core;
 
-namespace ToDoList.Application.Commands.UpdateToDoItem
+namespace ToDoList.Application.Queries.UpdateToDoItem
 {
     public class UpdateToDoItemCommand : IRequest
     {
