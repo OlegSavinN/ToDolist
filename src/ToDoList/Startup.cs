@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToDoList.Application.Services;
 using ToDoList.Extentions;
+using ToDoList.Infrastructure.Persistence.Contexts;
+using ToDoList.Infrastructure.Persistence.Extentions;
 using ToDoList.Infrastructure.Persistence.Services;
 using ToDoList.Infrastructure.Persistence.Services.Implementations;
 using ToDoList.Services.Implementations;
@@ -35,7 +37,8 @@ namespace ToDoList
                 .AddTransient<IDataAccess, DataAccess>()
                 .AddTransient<IConnectionStringProvider, ConnectionStringProvider>()
 
-                .AddAuth(_config);
+                .AddAuth(_config)
+                .AddPersistence(_config);
 
             services
                 .AddControllers()
@@ -43,8 +46,10 @@ namespace ToDoList
         }
 
         public void Configure(
-            IApplicationBuilder app)
+            IApplicationBuilder app,
+            DatabaseContext storage)
         {
+            storage.Migrate();
             app.UseRouting();
 
             app.UseAuthentication();
