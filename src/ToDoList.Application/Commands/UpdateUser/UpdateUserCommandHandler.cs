@@ -1,25 +1,26 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using ToDoList.Application.Services;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.UpdateUser
 {
     class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
         public UpdateUserCommandHandler(
-            IDataAccess dataAccess)
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
 
         public async Task<Unit> Handle(
             UpdateUserCommand command, 
             CancellationToken cancellationToken)
         {
-            await _dataAccess.UpdateUser(command.User);
+            _storage.Users.Update(command.User);
+            await _storage.SaveChangesAsync();
             return Unit.Value;
         }
     }

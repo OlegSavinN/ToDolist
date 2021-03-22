@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,37 +10,41 @@ using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Exceptions;
 using ToDoList.Application.Options;
-using ToDoList.Application.Services;
 using ToDoList.Core;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetToken
 {
-    class GetTokenQueryHandler : IRequestHandler<GetTokenQuery, string>
+    public class GetTokenQueryHandler : IRequestHandler<GetTokenQuery, string>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
         private readonly AuthOptions _authOptions;
 
         public GetTokenQueryHandler(
-            IDataAccess dataAccess,
+            DatabaseContext storage,
             IOptions<AuthOptions> authOptions)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
             _authOptions = authOptions.Value;
         }
         public async Task<string> Handle(
-            GetTokenQuery command,
+            GetTokenQuery query,
             CancellationToken cancellationToken)
         {
-            User user = await GetUser(command);
+            User user = await GetUser(query, cancellationToken);
             var identity = GetIdentity(user);
             var token = CreateToken(identity);
 
             return token;
         }
 
-        private async Task<User> GetUser(GetTokenQuery command)
+        private async Task<User> GetUser(
+            GetTokenQuery query,
+            CancellationToken cancellationToken)
         {
-            var user = await _dataAccess.GetUser(command.UserLogin, command.UserPassword);
+            User user = await _storage.Users.FirstOrDefaultAsync(
+                x => x.Login == query.UserLogin && x.Password == query.UserPassword,
+                cancellationToken);
 
             if (user == null)
             {
@@ -71,6 +76,7 @@ namespace ToDoList.Application.Queries.GetToken
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, Convert.ToString(user.Role))
+                //new Claim(ClaimsIdentity.DefaultNameClaimType, Convert.ToString(user.Id))
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(

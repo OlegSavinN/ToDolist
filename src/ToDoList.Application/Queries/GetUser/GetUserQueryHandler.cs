@@ -1,25 +1,29 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Application.Services;
 using ToDoList.Core;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetUser
 {
     class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
         public GetUserQueryHandler(
-            IDataAccess dataAccess)
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
         public async Task<User> Handle(
             GetUserQuery query,
             CancellationToken cancellationToken)
         {
-            User user = await _dataAccess.GetUser(query.UserLogin, query.UserPassword);
+            User user = await _storage.Users.FirstOrDefaultAsync(
+                x => x.Login == query.UserLogin && x.Password == query.UserPassword, 
+                cancellationToken);
+
             return user;
         }
     }

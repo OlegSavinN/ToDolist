@@ -15,13 +15,15 @@ using ToDoList.Application.Queries.GetUser;
 using ToDoList.Application.Queries.GetToDoList;
 using ToDoList.Application.Queries.GetToDoItem;
 using Microsoft.AspNetCore.Authorization;
+using ToDoList.DTO;
+using System.Collections.Generic;
 
 namespace ToDoList.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("users")]
-    [Authorize(Roles = "Admin, User, Vip")]
+    //[Authorize(Roles = "Admin, User, Vip")]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -33,8 +35,7 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        
+        //[Authorize(Roles = "Admin")]
         public async Task AddUser(
             [FromBody] User user)
         {
@@ -59,11 +60,13 @@ namespace ToDoList.Controllers
         }
 
         [HttpGet]
-        public async Task GetUser(
-            [FromBody] User user)
+        public async Task<User> GetUser(
+            [FromBody]  User user)
         {
-            var command = new GetUserQuery(user);
-            await _mediator.Send(command);
+            var query = new GetUserQuery(user);
+            User response = await _mediator.Send(query);
+
+            return response;
         }
 
         [HttpPost("ToDoItemlists")]
@@ -91,11 +94,12 @@ namespace ToDoList.Controllers
         }
 
         [HttpGet("ToDoItemLists")]
-        public async Task GetToDoItemsList(
+        public async Task<List<ToDoItemsList>> GetToDoItemsList(
             [FromBody] User user)
         {
             var command = new GetToDoItemListQuery(user);
-            await _mediator.Send(command);
+            List<ToDoItemsList> toDoItemsLists =  await _mediator.Send(command);
+            return toDoItemsLists;
         }
 
 

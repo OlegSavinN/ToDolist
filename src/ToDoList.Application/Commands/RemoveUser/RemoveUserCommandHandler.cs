@@ -1,25 +1,26 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Application.Services;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.RemoveUser
 {
     class RemoveUserCommandHandler : IRequestHandler<RemoveUserCommand>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
         public RemoveUserCommandHandler(
-            IDataAccess dataAccess)
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
 
         public async Task<Unit> Handle(
             RemoveUserCommand command,
             CancellationToken cancellationToken)
         {
-            await _dataAccess.RemoveUser(command.UserId);
+            _storage.Users.Remove(command.User);
+            await _storage.SaveChangesAsync();
             return Unit.Value;
         }
     }

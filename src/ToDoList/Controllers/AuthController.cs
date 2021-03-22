@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ToDoList.Core;
 using ToDoList.Application.Queries.GetToken;
+using ToDoList.DTO;
 
 namespace ToDoList.Controllers
 {
@@ -18,13 +19,24 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
-        public async Task<string> GetToken(
+        public async Task<AuthResultDto> GetToken(
             [FromBody] User user)
         {
-            var command = new GetTokenQuery(user);
-            var token = await _mediator.Send(command);
-
+            var query = new GetTokenQuery(user);
+            //var token = await _mediator.Send(query);
+            AuthResultDto token = new AuthResultDto();
+            token.AccessToken = await _mediator.Send(query);
             return token;
         }
+
+
+        //[HttpPost]
+        //public async Task<string> GetToken(
+        //    [FromBody] User user)
+        //{
+        //    var query = new GetTokenQuery(user);
+        //    var token = await _mediator.Send(query);
+        //    return token;
+        //}
     }
 }

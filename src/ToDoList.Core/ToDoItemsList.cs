@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ToDoList.Core
 {
@@ -10,6 +11,6 @@ namespace ToDoList.Core
         public DateTime Created { get; set; }
 
         public string Name { get; set; }
-        public ToDoItem[] Items { get; set; }
+        public List<ToDoItem> Items { get; set; }
     }
 }

@@ -1,25 +1,33 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Application.Services;
 using ToDoList.Core;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetToDoList
 {
-    class GetToDoItemListQueryHandler : IRequestHandler<GetToDoItemListQuery, ToDoItemsList[]>
+    class GetToDoItemListQueryHandler : IRequestHandler<GetToDoItemListQuery, List<ToDoItemsList>>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
-        public GetToDoItemListQueryHandler(IDataAccess dataAccess)
+        public GetToDoItemListQueryHandler(DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
-        public async Task<ToDoItemsList[]> Handle(
+        public async Task<List<ToDoItemsList>> Handle(
             GetToDoItemListQuery query, 
             CancellationToken cancellationToken)
         {
-            ToDoItemsList[] todoitem = await _dataAccess.GetTodoLists(query.UserId);
-            return todoitem;
+            var user = await _storage.Users
+                .Include(x => x.ToDoLists)
+                .ThenInclude(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == query.UserId, cancellationToken);
+
+            var toDoItemsList = user.ToDoLists;
+
+            return toDoItemsList;
         }
     }
 }
