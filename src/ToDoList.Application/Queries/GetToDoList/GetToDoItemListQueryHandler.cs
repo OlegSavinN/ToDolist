@@ -26,7 +26,7 @@ namespace ToDoList.Application.Queries.GetToDoList
                 .FirstOrDefaultAsync(x => x.Id == query.UserId, cancellationToken);
 
             var toDoItemsList = user.ToDoLists;
-
+            
             return toDoItemsList;
         }
     }

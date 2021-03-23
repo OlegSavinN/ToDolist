@@ -128,11 +128,13 @@ namespace ToDoList.Controllers
         }
 
         [HttpGet("ToDoItem")]
-        public async Task GetToDoItem(
-            [FromBody] ToDoItemsList toDoItemsList)
+        public async Task<List<ToDoItem>> GetToDoItem(
+            [FromBody] User user)
         {
-            var command = new GetToDoItemQuery(toDoItemsList);
-            await _mediator.Send(command);
+            var command = new GetToDoItemQuery(user);
+            List<ToDoItem> toDoItem = await _mediator.Send(command);
+
+            return toDoItem;
         }
     }
 }

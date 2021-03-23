@@ -13,11 +13,5 @@ namespace ToDoList.Application.Queries.GetUser
             UserLogin = user.Login;
             UserPassword = user.Password;
         }
-        //public AuthResultDto Token { get; }
-
-        //public GetUserQuery(AuthResultDto result)
-        //{
-        //    Token = result;
-        //}
     }
 }

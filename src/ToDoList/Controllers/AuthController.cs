@@ -23,20 +23,9 @@ namespace ToDoList.Controllers
             [FromBody] User user)
         {
             var query = new GetTokenQuery(user);
-            //var token = await _mediator.Send(query);
             AuthResultDto token = new AuthResultDto();
             token.AccessToken = await _mediator.Send(query);
             return token;
         }
-
-
-        //[HttpPost]
-        //public async Task<string> GetToken(
-        //    [FromBody] User user)
-        //{
-        //    var query = new GetTokenQuery(user);
-        //    var token = await _mediator.Send(query);
-        //    return token;
-        //}
     }
 }

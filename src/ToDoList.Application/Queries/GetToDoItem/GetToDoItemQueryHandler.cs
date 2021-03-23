@@ -1,24 +1,43 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Services;
 using ToDoList.Core;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetToDoItem
 {
-    class GetToDoItemQueryHandler : IRequestHandler<GetToDoItemQuery, ToDoItem[]>
+    class GetToDoItemQueryHandler : IRequestHandler<GetToDoItemQuery, List<ToDoItem>>
     {
-        private readonly IDataAccess _dataAccess;
-        public GetToDoItemQueryHandler(IDataAccess dataAccess)
+        private readonly DatabaseContext _storage;
+
+        public GetToDoItemQueryHandler(DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
-        public async Task<ToDoItem[]> Handle(
-            GetToDoItemQuery command,
+
+        public async Task<List<ToDoItem>> Handle(
+            GetToDoItemQuery query,
             CancellationToken cancellationToken)
         {
-            ToDoItem[] todoItem = await _dataAccess.GetTodoItem(command.ListId);
-            return todoItem;
+            User user = await _storage.Users
+                .Include(x => x.ToDoLists)
+                .ThenInclude(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == query.UserId, cancellationToken);
+
+            var toDoItemsList = user.ToDoLists;
+            List<ToDoItem> toDoItems = new List<ToDoItem>();
+
+            foreach (ToDoItemsList list in toDoItemsList)
+            {
+                foreach (ToDoItem item in list.Items)
+                {
+                    toDoItems.Add(item);
+                }
+            }
+            return toDoItems;
         }
     }
 }
