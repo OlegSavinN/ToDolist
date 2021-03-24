@@ -21,6 +21,7 @@ namespace ToDoList.Application.Queries.RemoveUser
         {
             _storage.Users.Remove(command.User);
             await _storage.SaveChangesAsync();
+
             return Unit.Value;
         }
     }

@@ -19,8 +19,9 @@ namespace ToDoList.Application.Queries.AddUser
             AddUserCommand command, 
             CancellationToken cancellationToken)
         {
-            await _storage.Users.AddAsync(command.User);
+            _storage.Users.Add(command.User);
             await _storage.SaveChangesAsync();
+
             return Unit.Value;
         }
     }

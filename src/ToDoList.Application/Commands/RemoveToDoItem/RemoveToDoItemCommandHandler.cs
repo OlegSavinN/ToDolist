@@ -1,22 +1,27 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Application.Services;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.RemoveToDoItem
 {
     class RemoveToDoItemCommandHandler : IRequestHandler<RemoveToDoItemCommand>
     {
-        private readonly IDataAccess _dataAccess;
-        public RemoveToDoItemCommandHandler(IDataAccess dataAccess)
+        private readonly DatabaseContext _storage;
+
+        public RemoveToDoItemCommandHandler(
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
+
         public async Task<Unit> Handle(
             RemoveToDoItemCommand command,
             CancellationToken cancellationToken)
         {
-            await _dataAccess.RemoveToDoItem(command.ToDoItemId);
+            _storage.Remove(command.ToDoItem);
+            await _storage.SaveChangesAsync();
+
             return Unit.Value;
         }
     }

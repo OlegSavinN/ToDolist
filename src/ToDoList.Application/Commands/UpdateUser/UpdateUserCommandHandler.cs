@@ -19,7 +19,7 @@ namespace ToDoList.Application.Queries.UpdateUser
             UpdateUserCommand command, 
             CancellationToken cancellationToken)
         {
-            _storage.Users.Update(command.User);
+            var user = _storage.Users.Update(command.User);
             await _storage.SaveChangesAsync();
             return Unit.Value;
         }

@@ -1,24 +1,27 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Application.Services;
+using ToDoList.Core;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.UpdateToDoList
 {
     class UpdateToDoItemListCommandHandler : IRequestHandler<UpdateToDoItemListCommand>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
         public UpdateToDoItemListCommandHandler(
-            IDataAccess dataAccess)
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
         public async Task<Unit> Handle(
             UpdateToDoItemListCommand command,
             CancellationToken cancellationToken)
         {
-            await _dataAccess.UpdateToDoList(command.ToDoItemsList);
+            _storage.Update(command.ToDoItemsList);
+            await _storage.SaveChangesAsync();
+
             return Unit.Value;
         }
     }

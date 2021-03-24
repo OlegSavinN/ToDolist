@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using System;
 using ToDoList.Core;
 
 namespace ToDoList.Application.Queries.RemoveToDoItem
 {
     public class RemoveToDoItemCommand : IRequest
     {
-        public Guid ToDoItemId { get; }
+        public ToDoItem ToDoItem { get; }
+
         public RemoveToDoItemCommand(ToDoItem toDoItem)
         {
-            ToDoItemId = toDoItem.Id;
+            ToDoItem = toDoItem;
         }
     }
 }
