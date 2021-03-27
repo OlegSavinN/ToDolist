@@ -17,6 +17,7 @@ using ToDoList.Application.Queries.GetToDoItem;
 using Microsoft.AspNetCore.Authorization;
 using ToDoList.DTO;
 using System.Collections.Generic;
+using AutoMapper;
 
 namespace ToDoList.Controllers
 {
@@ -27,11 +28,14 @@ namespace ToDoList.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
         public UsersController(
-            IMediator mediator)
+            IMediator mediator,
+            IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -60,13 +64,15 @@ namespace ToDoList.Controllers
         }
 
         [HttpGet]
-        public async Task<User> GetUser(
-            [FromBody]  User user)
+        public async Task<UserDTO> GetUser(
+            [FromBody]  UserDTO userRequest)
         {
-            var query = new GetUserQuery(user);
-            User response = await _mediator.Send(query);
+            var modelUser = _mapper.Map<User>(userRequest);
+            var query = new GetUserQuery(modelUser);
+            User user = await _mediator.Send(query);
+            var responce = _mapper.Map<UserDTO>(user);
 
-            return response;
+            return responce;
         }
 
         [HttpPost("ToDoItemlists")]

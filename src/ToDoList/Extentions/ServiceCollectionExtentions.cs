@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ToDoList.Application.Options;
+using ToDoList.Map;
 
 namespace ToDoList.Extentions
 {
@@ -32,6 +34,21 @@ namespace ToDoList.Extentions
                         ValidateIssuerSigningKey = true,
                     };
                 });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMapping(
+            this IServiceCollection services,
+            IConfiguration config)
+        {
+            var mapperConfig = new MapperConfiguration(x =>
+            {
+                x.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             return services;
         }

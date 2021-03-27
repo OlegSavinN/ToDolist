@@ -39,7 +39,10 @@ namespace ToDoList
                 .AddTransient<IConnectionStringProvider, ConnectionStringProvider>()
 
                 .AddAuth(_config)
-                .AddPersistence(_config);
+                .AddPersistence(_config)
+                .AddMapping(_config);
+
+
 
             services
                 .AddControllers()
