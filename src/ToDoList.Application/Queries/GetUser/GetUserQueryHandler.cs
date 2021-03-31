@@ -21,7 +21,7 @@ namespace ToDoList.Application.Queries.GetUser
             CancellationToken cancellationToken)
         {
             User user = await _storage.Users.FirstOrDefaultAsync(
-                x => x.Login == query.UserLogin && x.Password == query.UserPassword, 
+                x => x.Login == query.Login && x.Password == query.Password, 
                 cancellationToken);
 
             return user;

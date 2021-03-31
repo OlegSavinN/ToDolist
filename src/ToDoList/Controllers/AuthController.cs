@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ToDoList.Core;
 using ToDoList.Application.Queries.GetToken;
 using ToDoList.DTO;
+using AutoMapper;
 
 namespace ToDoList.Controllers
 {
@@ -12,18 +13,22 @@ namespace ToDoList.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public AuthController(IMediator mediator)
+        public AuthController(
+            IMediator mediator,
+            IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<AuthResultDto> GetToken(
-            [FromBody] User user)
+        public async Task<AuthResultDTO> GetToken(
+            [FromBody] AuthRequestDTO authRequestDTO)
         {
-            var query = new GetTokenQuery(user);
-            AuthResultDto token = new AuthResultDto();
+            var query = _mapper.Map<GetTokenQuery>(authRequestDTO);
+            var token = new AuthResultDTO();
             token.AccessToken = await _mediator.Send(query);
             return token;
         }

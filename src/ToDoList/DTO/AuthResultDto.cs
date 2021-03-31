@@ -1,6 +1,6 @@
 ﻿namespace ToDoList.DTO
 {
-    public class AuthResultDto
+    public class AuthResultDTO
     {
         public string AccessToken { get; set; }
     }

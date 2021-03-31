@@ -18,13 +18,13 @@ using Microsoft.AspNetCore.Authorization;
 using ToDoList.DTO;
 using System.Collections.Generic;
 using AutoMapper;
+using System;
 
 namespace ToDoList.Controllers
 {
-    //[Authorize]
     [ApiController]
-    [Route("users")]
-    //[Authorize(Roles = "Admin, User, Vip")]
+    [Route("api/v1/users")]
+    [Authorize(Roles = "Admin, User, Vip")]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -39,7 +39,6 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
         public async Task AddUser(
             [FromBody] User user)
         {
@@ -67,8 +66,7 @@ namespace ToDoList.Controllers
         public async Task<UserDTO> GetUser(
             [FromBody]  UserDTO userRequest)
         {
-            var modelUser = _mapper.Map<User>(userRequest);
-            var query = new GetUserQuery(modelUser);
+            var query = _mapper.Map<GetUserQuery>(userRequest);
             User user = await _mediator.Send(query);
             var responce = _mapper.Map<UserDTO>(user);
 
@@ -119,17 +117,19 @@ namespace ToDoList.Controllers
 
         [HttpPut("ToDoItem")]
         public async Task UpdateToDoItem(
-            [FromBody] ToDoItem toDoItem)
+            [FromBody] ToDoItemDTO toDoItemDTO)
         {
-            var command = new UpdateToDoItemCommand(toDoItem);
+            var command = _mapper.Map<UpdateToDoItemCommand>(toDoItemDTO);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
         [HttpDelete("ToDoItem")]
         public async Task RemoveToDoItem(
-            [FromBody] ToDoItem toDoItem)
+            [FromBody] ToDoItemDTO toDoItemDTO)
         {
-            var command = new RemoveToDoItemCommand(toDoItem);
+            var command = _mapper.Map<RemoveToDoItemCommand>(toDoItemDTO);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 

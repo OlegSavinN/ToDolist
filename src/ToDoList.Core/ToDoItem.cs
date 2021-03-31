@@ -13,5 +13,17 @@ namespace ToDoList.Core
         public string Description { get; set; }
         public Priority Priority { get; set; }
         public State State { get; set; }
+
+        public void Update (
+            string title,
+            string description,
+            string priority,
+            string state)
+        {
+            Title = title;
+            Description = description;
+            Priority = (Priority)Enum.Parse(typeof(Priority), priority);
+            State = (State)Enum.Parse(typeof(State), state);
+        }
     }
 }

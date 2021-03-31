@@ -18,7 +18,7 @@ namespace ToDoList.Application.Queries.UpdateToDoItem
             UpdateToDoItemCommand command,
             CancellationToken cancellationToken)
         {
-            _storage.Update(command.ToDoItem);
+            //_storage.Update(command.ToDoItem);
             await _storage.SaveChangesAsync();
 
             return Unit.Value;

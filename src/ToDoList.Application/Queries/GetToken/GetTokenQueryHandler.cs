@@ -43,7 +43,7 @@ namespace ToDoList.Application.Queries.GetToken
             CancellationToken cancellationToken)
         {
             User user = await _storage.Users.FirstOrDefaultAsync(
-                x => x.Login == query.UserLogin && x.Password == query.UserPassword,
+                x => x.Login == query.Login && x.Password == query.Password,
                 cancellationToken);
 
             if (user == null)
@@ -75,8 +75,8 @@ namespace ToDoList.Application.Queries.GetToken
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, Convert.ToString(user.Role))
-                //new Claim(ClaimsIdentity.DefaultNameClaimType, Convert.ToString(user.Id))
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, Convert.ToString(user.Role)),
+                new Claim("UserId", Convert.ToString(user.Id))
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
