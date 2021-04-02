@@ -19,10 +19,12 @@ namespace ToDoList.Core
             Name = name;
         }
 
-        public void AddItem(
-            ToDoItem item)
+        public void Create(Guid userid, string name)
         {
-            Items.Add(item);
+            Id = Guid.NewGuid();
+            UserId = userid;
+            Created = DateTime.Now;
+            Name = name;
         }
 
         public void DeleteItem(

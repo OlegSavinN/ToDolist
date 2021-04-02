@@ -1,16 +1,13 @@
 ﻿using MediatR;
-using ToDoList.Core;
+using System;
 
 namespace ToDoList.Application.Queries.UpdateToDoList
 {
     public class UpdateToDoItemListCommand : IRequest
     {
-        public ToDoItemsList ToDoItemsList { get; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
-        public UpdateToDoItemListCommand(
-            ToDoItemsList toDoItemsList)
-        {
-            ToDoItemsList = toDoItemsList;
-        }
+        public string Name { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Core;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.UpdateToDoList
@@ -19,7 +19,16 @@ namespace ToDoList.Application.Queries.UpdateToDoList
             UpdateToDoItemListCommand command,
             CancellationToken cancellationToken)
         {
-            _storage.Update(command.ToDoItemsList);
+           var user = await _storage.Users
+                .Include(x => x.ToDoLists)
+                .ThenInclude(x => x.Items)
+                .FirstOrDefaultAsync(
+                x => x.Id == command.UserId,
+                cancellationToken);
+
+            user.RenameList(command.Id, command.Name);
+            _storage.Update(user);
+
             await _storage.SaveChangesAsync();
 
             return Unit.Value;

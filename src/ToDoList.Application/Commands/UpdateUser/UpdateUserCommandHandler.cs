@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.UpdateUser
@@ -19,7 +20,12 @@ namespace ToDoList.Application.Queries.UpdateUser
             UpdateUserCommand command, 
             CancellationToken cancellationToken)
         {
-            var user = _storage.Users.Update(command.User);
+            var user = await _storage.Users
+                .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+
+            user.Update(command.Login, command.BirthDate, command.Name, command.Email, command.Role);
+
+            _storage.Users.Update(user);
             await _storage.SaveChangesAsync();
             return Unit.Value;
         }

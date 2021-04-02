@@ -48,9 +48,10 @@ namespace ToDoList.Controllers
 
         [HttpPut]
         public async Task UpdateUser(
-            [FromBody] User user)
+            [FromBody] UserDTO userDTO)
         {
-            var command = new UpdateUserCommand(user);
+            var command = _mapper.Map<UpdateUserCommand>(userDTO);
+            command.Id = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
@@ -75,25 +76,28 @@ namespace ToDoList.Controllers
 
         [HttpPost("ToDoItemlists")]
         public async Task AddToDoItemList(
-            [FromBody] ToDoItemsList toDoItemList)
+            [FromBody] ToDoItemsListDTO toDoItemListDTO)
         {
-            var command = new AddToDoItemListCommand(toDoItemList);
+            var command = _mapper.Map<AddToDoItemListCommand>(toDoItemListDTO);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
         [HttpPut("ToDoItemlists")]
         public async Task UpdatedToDoItemList(
-            [FromBody] ToDoItemsList toDoItemList)
+            [FromBody] ToDoItemsListDTO toDoItemListDTO)
         {
-            var command = new UpdateToDoItemListCommand(toDoItemList);
+            var command = _mapper.Map<UpdateToDoItemListCommand>(toDoItemListDTO);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
         [HttpDelete("ToDoItemLists")]
         public async Task RemoveToDoItemsList(
-            [FromBody] ToDoItemsList toDoItemsList)
+            [FromBody] ToDoItemsListDTO toDoItemsList)
         {
-            var command = new RemoveToDoItemListCommand(toDoItemsList);
+            var command = _mapper.Map<RemoveToDoItemListCommand>(toDoItemsList);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
@@ -109,9 +113,10 @@ namespace ToDoList.Controllers
 
         [HttpPost("ToDoItem")]
         public async Task AddToDoItem(
-            [FromBody] ToDoItem toDoItem)
+            [FromBody] ToDoItemDTO toDoItem)
         {
-            var command = new AddToDoItemCommand(toDoItem);
+            var command = _mapper.Map<AddToDoItemCommand>(toDoItem);
+            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 

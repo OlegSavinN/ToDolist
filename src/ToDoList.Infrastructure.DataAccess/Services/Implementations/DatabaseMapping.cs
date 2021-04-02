@@ -35,19 +35,19 @@ namespace ToDoList.Infrastructure.Persistence.Services.Implementations
             return toDoItemsList;
         }
 
-        public static ToDoItem ToDoItem (SqlDataReader reader)
-        {
-            var toDoItem = new ToDoItem();
+        //public static ToDoItem ToDoItem (SqlDataReader reader)
+        //{
+        //    var toDoItem = new ToDoItem();
 
-            toDoItem.Id = reader.GetGuid(0);
-            toDoItem.ListId = reader.GetGuid(1);
-            toDoItem.Date = reader.GetDateTime(2);
-            toDoItem.Title = reader.GetString(3);
-            toDoItem.Description = reader.GetString(4);
-            toDoItem.Priority = (Priority)Enum.Parse(typeof(Priority), reader.GetString(5));
-            toDoItem.State = (State)Enum.Parse(typeof(State), reader.GetString(6));
+        //    toDoItem.Id = reader.GetGuid(0);
+        //    toDoItem.ListId = reader.GetGuid(1);
+        //    toDoItem.Date = reader.GetDateTime(2);
+        //    toDoItem.Title = reader.GetString(3);
+        //    toDoItem.Description = reader.GetString(4);
+        //    toDoItem.Priority = (Priority)Enum.Parse(typeof(Priority), reader.GetString(5));
+        //    toDoItem.State = (State)Enum.Parse(typeof(State), reader.GetString(6));
 
-            return toDoItem;
-        }
+        //    return toDoItem;
+        //}
     }
 }

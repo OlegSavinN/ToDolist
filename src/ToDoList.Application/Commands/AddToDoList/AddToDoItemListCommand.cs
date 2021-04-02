@@ -1,16 +1,13 @@
 ﻿using MediatR;
-using ToDoList.Core;
+using System;
 
 namespace ToDoList.Application.Queries.AddToDoList
 {
     public class AddToDoItemListCommand : IRequest
     {
-        public ToDoItemsList ToDoItemsList { get; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
-        public AddToDoItemListCommand(
-            ToDoItemsList toDoItemsList)
-        {
-            ToDoItemsList = toDoItemsList;
-        }
+        public string Name { get; set; }
     }
 }

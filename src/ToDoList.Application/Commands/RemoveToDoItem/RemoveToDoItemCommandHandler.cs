@@ -20,8 +20,6 @@ namespace ToDoList.Application.Queries.RemoveToDoItem
             RemoveToDoItemCommand command,
             CancellationToken cancellationToken)
         {
-            //_storage.Remove(command.ToDoItem);
-            //await _storage.SaveChangesAsync();
             var user = await _storage.Users
             .Include(x => x.ToDoLists)
             .ThenInclude(x => x.Items)
@@ -31,6 +29,7 @@ namespace ToDoList.Application.Queries.RemoveToDoItem
 
             user.DeleteItem(command.ListId, command.Id);
             _storage.Users.Update(user);
+
             await _storage.SaveChangesAsync();
 
             return Unit.Value;

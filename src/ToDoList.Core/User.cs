@@ -18,6 +18,14 @@ namespace ToDoList.Core
 
         public List<ToDoItemsList> ToDoLists { get; set; }
 
+        public void Update(string login, string birthDate, string name, string email, string role)
+        {
+            Login = login;
+            BirthDate = DateTime.Parse(birthDate);
+            Name = name;
+            Email = email;
+            Role = (Role)Enum.Parse(typeof(Role), role);
+        }
         public void RenameList(
             Guid listId,
             string name)
@@ -26,6 +34,25 @@ namespace ToDoList.Core
             list.Rename(name);
         }
 
+        public void DeleteList(Guid listId)
+        {
+            var list = ToDoLists.FirstOrDefault(x => x.Id == listId);
+            ToDoLists.Remove(list);
+        }
+
+        public void AddItem(
+            Guid listId,
+            string title,
+            string description,
+            string priority,
+            string state)
+        {
+            var list = ToDoLists.FirstOrDefault(x => x.Id == listId);
+            var item = new ToDoItem();
+            item.Create(listId, title, description, priority, state);
+            list.Items.Add(item);
+        }
+         
         public void UpdateItem(
             Guid listId,
             Guid itemId,

@@ -42,8 +42,6 @@ namespace ToDoList
                 .AddPersistence(_config)
                 .AddMapping(_config);
 
-
-
             services
                 .AddControllers()
                 .AddNewtonsoftJson();

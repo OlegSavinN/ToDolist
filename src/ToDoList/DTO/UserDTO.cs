@@ -8,11 +8,9 @@ namespace ToDoList.DTO
 
         public string Login { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-
-        public ToDoItemsListDTO[] ToDoLists { get; set; }
     }
 }

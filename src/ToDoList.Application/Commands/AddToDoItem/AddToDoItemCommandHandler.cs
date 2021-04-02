@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Infrastructure.Persistence.Contexts;
@@ -19,7 +20,21 @@ namespace ToDoList.Application.Queries.AddToDoItem
             AddToDoItemCommand command,
             CancellationToken cancellationToken)
         {
-            _storage.Add(command.ToDoItem);
+            var user = await _storage.Users
+            .Include(x => x.ToDoLists)
+            .ThenInclude(x =>x.Items)
+            .FirstOrDefaultAsync(
+                x => x.Id == command.UserId,
+                cancellationToken);
+
+            user.AddItem(
+                command.ListId,
+                command.Title,
+                command.Description,
+                command.Priority,
+                command.State);
+
+            _storage.Update(user);
             await _storage.SaveChangesAsync();
 
             return Unit.Value;
