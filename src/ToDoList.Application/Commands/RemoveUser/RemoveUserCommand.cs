@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using ToDoList.Core;
+using System;
+using ToDoList.Core.Models;
 
 namespace ToDoList.Application.Queries.RemoveUser
 {
     public class RemoveUserCommand : IRequest
     {
-        public User User { get; }
+        public Guid Id { get; set; }
 
-        public RemoveUserCommand(User user)
-        {
-            User = user;
-        }
+        public string Login { get; set; }
+
+        public UserModel UserModel { get; set; }
     }
 }

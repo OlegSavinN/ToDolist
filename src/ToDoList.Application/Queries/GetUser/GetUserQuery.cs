@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 
 namespace ToDoList.Application.Queries.GetUser
 {

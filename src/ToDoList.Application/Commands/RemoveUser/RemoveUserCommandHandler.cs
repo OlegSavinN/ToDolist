@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.RemoveUser
@@ -19,9 +21,12 @@ namespace ToDoList.Application.Queries.RemoveUser
             RemoveUserCommand command,
             CancellationToken cancellationToken)
         {
-            _storage.Users.Remove(command.User);
-            await _storage.SaveChangesAsync();
+            User user = await _storage.Users
+                .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
 
+            _storage.Users.Remove(user);
+
+            await _storage.SaveChangesAsync();
             return Unit.Value;
         }
     }

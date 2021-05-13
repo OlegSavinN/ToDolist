@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Configurations;
 using ToDoList.Infrastructure.Persistence.Options;
 

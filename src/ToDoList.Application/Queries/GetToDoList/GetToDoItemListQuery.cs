@@ -1,16 +1,12 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 
 namespace ToDoList.Application.Queries.GetToDoList
 {
     public class GetToDoItemListQuery : IRequest<List<ToDoItemsList>>
     {
-        public Guid UserId { get; }
-        public GetToDoItemListQuery(User user)
-        {
-            UserId = user.Id;
-        }
+        public Guid UserId { get; set; }
     }
 }

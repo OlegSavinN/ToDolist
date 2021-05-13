@@ -26,7 +26,7 @@ namespace ToDoList.Application.Queries.UpdateToDoItem
                 x => x.Id == command.UserId,
                 cancellationToken);
 
-            user.UpdateItem(command.ListId, command.Id, command.Title, command.Description, command.Priority, command.State);
+            user.UpdateItem(command.ListId, command.ItemId, command.ToDoItemModel);
             _storage.Users.Update(user);
 
             await _storage.SaveChangesAsync();

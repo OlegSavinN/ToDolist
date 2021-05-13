@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.Swagger;
 using ToDoList.Application.Services;
 using ToDoList.Extentions;
+using ToDoList.Filters;
 using ToDoList.Infrastructure.Persistence.Contexts;
 using ToDoList.Infrastructure.Persistence.Extentions;
 using ToDoList.Infrastructure.Persistence.Services;
@@ -32,6 +31,11 @@ namespace ToDoList
             //    .ToArray();
             var assembly = AppDomain.CurrentDomain.Load("ToDoList.Application");
 
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(SetIdFilterAttribute)); 
+            });
+
             services
                 .AddMediatR(assembly)
 
@@ -40,13 +44,14 @@ namespace ToDoList
 
                 .AddAuth(_config)
                 .AddPersistence(_config)
-                .AddMapping(_config);
+                .AddMapping();
 
             services
                 .AddControllers()
                 .AddNewtonsoftJson();
+
             services
-                .AddSwaggerGen();
+                 .AddSwagger();
         }
 
         public void Configure(

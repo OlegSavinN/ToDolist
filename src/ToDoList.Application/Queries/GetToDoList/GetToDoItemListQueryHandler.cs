@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetToDoList

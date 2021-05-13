@@ -21,18 +21,13 @@ namespace ToDoList.Application.Queries.AddToDoItem
             CancellationToken cancellationToken)
         {
             var user = await _storage.Users
-            .Include(x => x.ToDoLists)
-            .ThenInclude(x =>x.Items)
-            .FirstOrDefaultAsync(
-                x => x.Id == command.UserId,
-                cancellationToken);
+                .Include(x => x.ToDoLists)
+                .ThenInclude(x =>x.Items)
+                .FirstOrDefaultAsync(
+                    x => x.Id == command.UserId,
+                    cancellationToken);
 
-            user.AddItem(
-                command.ListId,
-                command.Title,
-                command.Description,
-                command.Priority,
-                command.State);
+            user.AddItem(command.ListId, command.ToDoItemModel);
 
             _storage.Update(user);
             await _storage.SaveChangesAsync();

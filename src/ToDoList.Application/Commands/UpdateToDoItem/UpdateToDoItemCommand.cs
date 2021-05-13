@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System;
+using ToDoList.Core.Models;
 
 namespace ToDoList.Application.Queries.UpdateToDoItem
 {
@@ -7,14 +8,11 @@ namespace ToDoList.Application.Queries.UpdateToDoItem
     {
         public Guid UserId { get; set; }
 
-        public Guid Id { get; set; }
         public Guid ListId { get; set; }
+        public Guid ItemId { get; set; }
 
         public DateTime Date { get; set; }
 
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Priority { get; set; }
-        public string State { get; set; }
+        public ToDoItemModel ToDoItemModel { get; set; }
     }
 }

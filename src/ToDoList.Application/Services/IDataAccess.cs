@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 
 namespace ToDoList.Application.Services
 {

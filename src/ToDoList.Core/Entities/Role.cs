@@ -1,4 +1,4 @@
-﻿namespace ToDoList.Core
+﻿namespace ToDoList.Core.Entities
 {
     public enum Role
     {

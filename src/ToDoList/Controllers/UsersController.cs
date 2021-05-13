@@ -4,27 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoList.Application.Queries.AddUser;
 using ToDoList.Application.Queries.UpdateUser;
 using ToDoList.Application.Queries.RemoveUser;
-using ToDoList.Core;
-using ToDoList.Application.Queries.AddToDoList;
-using ToDoList.Application.Queries.AddToDoItem;
-using ToDoList.Application.Queries.UpdateToDoList;
-using ToDoList.Application.Queries.RemoveToDoList;
-using ToDoList.Application.Queries.UpdateToDoItem;
-using ToDoList.Application.Queries.RemoveToDoItem;
 using ToDoList.Application.Queries.GetUser;
-using ToDoList.Application.Queries.GetToDoList;
-using ToDoList.Application.Queries.GetToDoItem;
-using Microsoft.AspNetCore.Authorization;
 using ToDoList.DTO;
-using System.Collections.Generic;
 using AutoMapper;
 using System;
+using ToDoList.Core.Entities;
+using ToDoList.Filters;
 
 namespace ToDoList.Controllers
 {
     [ApiController]
+    [SetIdFilter]
     [Route("api/v1/users")]
-    [Authorize(Roles = "Admin, User, Vip")]
+    //[Authorize(Roles = "Admin, User, Vip")]
     public class UsersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -40,9 +32,9 @@ namespace ToDoList.Controllers
 
         [HttpPost]
         public async Task AddUser(
-            [FromBody] User user)
+            [FromBody] UserDTO userDTO)
         {
-            var command = new AddUserCommand(user);
+            var command = _mapper.Map<AddUserCommand>(userDTO);
             await _mediator.Send(command);
         }
 
@@ -57,9 +49,10 @@ namespace ToDoList.Controllers
 
         [HttpDelete]
         public async Task RemoveUser(
-            [FromBody] User user)
+            [FromBody] UserDTO userDTO)
         {
-            var command = new RemoveUserCommand(user);
+            var command = _mapper.Map<RemoveUserCommand>(userDTO);
+            command.Id = Guid.Parse(User.FindFirst("UserId").Value);
             await _mediator.Send(command);
         }
 
@@ -72,80 +65,6 @@ namespace ToDoList.Controllers
             var responce = _mapper.Map<UserDTO>(user);
 
             return responce;
-        }
-
-        [HttpPost("ToDoItemlists")]
-        public async Task AddToDoItemList(
-            [FromBody] ToDoItemsListDTO toDoItemListDTO)
-        {
-            var command = _mapper.Map<AddToDoItemListCommand>(toDoItemListDTO);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpPut("ToDoItemlists")]
-        public async Task UpdatedToDoItemList(
-            [FromBody] ToDoItemsListDTO toDoItemListDTO)
-        {
-            var command = _mapper.Map<UpdateToDoItemListCommand>(toDoItemListDTO);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpDelete("ToDoItemLists")]
-        public async Task RemoveToDoItemsList(
-            [FromBody] ToDoItemsListDTO toDoItemsList)
-        {
-            var command = _mapper.Map<RemoveToDoItemListCommand>(toDoItemsList);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpGet("ToDoItemLists")]
-        public async Task<List<ToDoItemsList>> GetToDoItemsList(
-            [FromBody] User user)
-        {
-            var command = new GetToDoItemListQuery(user);
-            List<ToDoItemsList> toDoItemsLists =  await _mediator.Send(command);
-            return toDoItemsLists;
-        }
-
-
-        [HttpPost("ToDoItem")]
-        public async Task AddToDoItem(
-            [FromBody] ToDoItemDTO toDoItem)
-        {
-            var command = _mapper.Map<AddToDoItemCommand>(toDoItem);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpPut("ToDoItem")]
-        public async Task UpdateToDoItem(
-            [FromBody] ToDoItemDTO toDoItemDTO)
-        {
-            var command = _mapper.Map<UpdateToDoItemCommand>(toDoItemDTO);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpDelete("ToDoItem")]
-        public async Task RemoveToDoItem(
-            [FromBody] ToDoItemDTO toDoItemDTO)
-        {
-            var command = _mapper.Map<RemoveToDoItemCommand>(toDoItemDTO);
-            command.UserId = Guid.Parse(User.FindFirst("UserId").Value);
-            await _mediator.Send(command);
-        }
-
-        [HttpGet("ToDoItem")]
-        public async Task<List<ToDoItem>> GetToDoItem(
-            [FromBody] User user)
-        {
-            var command = new GetToDoItemQuery(user);
-            List<ToDoItem> toDoItem = await _mediator.Send(command);
-
-            return toDoItem;
         }
     }
 }

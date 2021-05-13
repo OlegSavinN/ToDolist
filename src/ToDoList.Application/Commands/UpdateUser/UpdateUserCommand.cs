@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System;
+using ToDoList.Core.Models;
 
 namespace ToDoList.Application.Queries.UpdateUser
 {
@@ -9,9 +10,6 @@ namespace ToDoList.Application.Queries.UpdateUser
 
         public string Login { get; set; }
 
-        public string BirthDate { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+        public UserModel UserModel { get; set; }
     }
 }

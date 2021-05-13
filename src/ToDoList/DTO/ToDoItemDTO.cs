@@ -2,10 +2,11 @@
 
 namespace ToDoList.DTO
 {
-    public class ToDoItemDTO
+    public class ToDoItemDTO : IUserId
     {
         public Guid Id { get; set; }
         public Guid ListId { get; set; }
+        public Guid UserId { get; set; }
 
         public DateTime Date { get; set; }
 

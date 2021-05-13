@@ -1,14 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using ToDoList.Core;
 using ToDoList.Application.Queries.GetToken;
 using ToDoList.DTO;
 using AutoMapper;
+using ToDoList.Filters;
 
 namespace ToDoList.Controllers
 {
     [ApiController]
+    [SetIdFilter]
     [Route("Auth")]
     public class AuthController : ControllerBase
     {

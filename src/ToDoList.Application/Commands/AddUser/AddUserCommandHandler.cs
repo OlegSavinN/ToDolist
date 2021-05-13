@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.AddUser
@@ -19,7 +20,10 @@ namespace ToDoList.Application.Queries.AddUser
             AddUserCommand command, 
             CancellationToken cancellationToken)
         {
-            _storage.Users.Add(command.User);
+            User user = new User(command.UserModel);
+
+            await _storage.Users.AddAsync(user);
+
             await _storage.SaveChangesAsync();
 
             return Unit.Value;

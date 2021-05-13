@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Core;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.AddToDoList
@@ -25,11 +26,11 @@ namespace ToDoList.Application.Queries.AddToDoList
                 .Include(x => x.ToDoLists)
                 .ThenInclude(x => x.Items)
                 .FirstOrDefaultAsync(x => x.Id == command.UserId, cancellationToken);
-            var list = new ToDoItemsList();
-            
-            list.Create(command.UserId, command.Name);
+            var list = new ToDoItemsList(command.UserId, command.Name);
+
             user.ToDoLists.Add(list);
-             _storage.Users.Update(user);
+
+            _storage.Users.Update(user);
             _storage.SaveChanges();
 
             return Unit.Value;

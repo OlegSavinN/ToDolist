@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ToDoList.Application.Exceptions;
 using ToDoList.Application.Options;
-using ToDoList.Core;
+using ToDoList.Core.Entities;
 using ToDoList.Infrastructure.Persistence.Contexts;
 
 namespace ToDoList.Application.Queries.GetToken
