@@ -1,25 +1,31 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using ToDoList.Application.Services;
+using ToDoList.Core.Entities;
+using ToDoList.Infrastructure.Persistence.Contexts;
 
-namespace ToDoList.Application.Commands.AddUser
+namespace ToDoList.Application.Queries.AddUser
 {
     public class AddUserCommandHandler : IRequestHandler<AddUserCommand>
     {
-        private readonly IDataAccess _dataAccess;
+        private readonly DatabaseContext _storage;
 
         public AddUserCommandHandler(
-            IDataAccess dataAccess)
+            DatabaseContext storage)
         {
-            _dataAccess = dataAccess;
+            _storage = storage;
         }
 
         public async Task<Unit> Handle(
             AddUserCommand command, 
             CancellationToken cancellationToken)
         {
-            await _dataAccess.AddUser(command.User);
+            User user = new User(command.UserModel);
+
+            await _storage.Users.AddAsync(user);
+
+            await _storage.SaveChangesAsync();
+
             return Unit.Value;
         }
     }

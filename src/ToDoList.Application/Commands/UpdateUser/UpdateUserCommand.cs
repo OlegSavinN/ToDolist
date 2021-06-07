@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using ToDoList.Core;
+using System;
+using ToDoList.Core.Models;
 
-namespace ToDoList.Application.Commands.UpdateUser
+namespace ToDoList.Application.Queries.UpdateUser
 {
     public class UpdateUserCommand : IRequest
     {
-        public User User {get;}
+        public Guid Id { get; set; }
 
-        public UpdateUserCommand(User user)
-        {
-            User = user;
-        }
+        public string Login { get; set; }
+
+        public UserModel UserModel { get; set; }
     }
 }
